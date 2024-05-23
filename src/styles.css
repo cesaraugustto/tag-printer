@@ -1,0 +1,12 @@
+@media screen {
+    thead {
+      display: table-header-group; /* Exibe o cabeçalho na visualização */
+    }
+  }
+  
+  @media print {
+    thead {
+      display: none; /* Oculta o cabeçalho durante a impressão */
+    }
+  }
+  
