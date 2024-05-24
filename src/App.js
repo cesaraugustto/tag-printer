@@ -7,6 +7,7 @@ import Papa from 'papaparse';
 import qrCode from './qrCode.png';
 import SinosteelLogo from './sinosteel-logo.png';
 import { Alert } from 'react-bootstrap';
+import ViewerLogo from './3dViewer/ViewerLogo';
 
 function App() {
   const [data, setData] = useState([]);
@@ -123,9 +124,26 @@ function App() {
               <h5>Automação para impressão de etiquetas</h5>
             </Col>
           </Row>
+          <Row className="">
+            <Col>
+              <input
+                type="file"
+                accept=".csv"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileInputChange}
+              />
+              <button
+                className="btn btn-primary"
+                onClick={() => fileInputRef.current.click()}
+              >
+                Carregar CSV
+              </button>
+            </Col>
+          </Row>
         </Col>
         <Col lg={3} className="d-flex justify-content-end align-items-end">
-          <img className="img-responsive" src={SinosteelLogo} alt="Sinosteel Logo" />
+          <ViewerLogo />
         </Col>
       </Row>
       {alert.message && (
@@ -134,23 +152,7 @@ function App() {
         </Alert>
       )}
 
-      <Row className="my-2">
-        <Col>
-          <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleFileInputChange}
-          />
-          <button
-            className="btn btn-primary"
-            onClick={() => fileInputRef.current.click()}
-          >
-            Carregar CSV
-          </button>
-        </Col>
-      </Row>
+
 
       <Row className="my-2">
         <Col>
