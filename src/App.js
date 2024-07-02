@@ -270,18 +270,37 @@ const PrintableTable = React.forwardRef(({ data }, ref) => (
       `}
     </style>
     {data.map((item, index) => (
-      <div className="row mb-3" key={index} style={{ pageBreakInside: 'avoid' }}>
-        <div className="col-8">
-          <h5>Fornecedor: {item.supplier}</h5>
-          <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
-          <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
-          <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
-          <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
+      <>
+        <div className="row text-center h-30">
+          <h2>Sinosteel</h2>
         </div>
-        <div className="col-4 text-center">
-          <img src={qrCode} className="img-fluid qr-code-img" alt="QR Code" />
+        <div className="row mb-5 pb-2" key={index} style={{ pageBreakInside: 'avoid' }}>
+          <div className="col-1">
+          </div>
+          <div className="col-10">
+            <p className="p-0 m-0">Fornecedor: {item.supplier}</p>
+            <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
+            <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
+            <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
+            <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
+          </div>
+          <div className="col-1">
+          </div>
         </div>
-      </div>
+      </>
+      /*
+  <div className="row mb-3" key={index} style={{ pageBreakInside: 'avoid' }}>
+    <div className="col-8">
+      <h5>Fornecedor: {item.supplier}</h5>
+      <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
+      <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
+      <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
+      <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
+    </div>
+    <div className="col-4 text-center">
+      <img src={qrCode} className="img-fluid qr-code-img" alt="QR Code" />
+    </div>
+  </div>*/
     ))}
   </div>
 ));

@@ -6,7 +6,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { useEffect, useRef } from 'react';
 
 const Scene = () => {
-    const fbx = useFBX("/Sinosteel3d.fbx");
+    const fbx = useFBX("./Sinosteel3d.fbx");
 
     // Use useRef para criar uma referência à rotação horizontal
     const horizontalRotation = useRef(0);
