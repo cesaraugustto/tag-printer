@@ -7,13 +7,13 @@ import Papa from 'papaparse';
 import qrCode from './qrCode.png';
 import SinosteelLogo from './sinosteel-logo.png';
 import { Alert } from 'react-bootstrap';
-import ViewerLogo from './3dViewer/ViewerLogo';
 
 function App() {
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [alert, setAlert] = useState({ message: '', type: '' });
+  const [useQRCode, setUseQRCode] = useState(false);
 
   const fileInputRef = useRef();
 
@@ -61,21 +61,22 @@ function App() {
 
   const componentRef = useRef();
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    onAfterPrint: () => {
-      setAlert({ message: 'Etiquetas impressas com sucesso!', type: 'success' });
-      setTimeout(() => {
-        setAlert({ message: '', type: '' });
-      }, 5000);
-    },
-    onPrintError: () => {
-      setAlert({ message: 'Erro ao imprimir etiquetas.', type: 'danger' });
-      setTimeout(() => {
-        setAlert({ message: '', type: '' });
-      }, 5000);
-    }
-  });
+  const handlePrint = useReactToPrint(
+    {
+      content: () => componentRef.current,
+      onAfterPrint: () => {
+        setAlert({ message: 'Etiquetas impressas com sucesso!', type: 'success' });
+        setTimeout(() => {
+          setAlert({ message: '', type: '' });
+        }, 5000);
+      },
+      onPrintError: () => {
+        setAlert({ message: 'Erro ao imprimir etiquetas.', type: 'danger' });
+        setTimeout(() => {
+          setAlert({ message: '', type: '' });
+        }, 5000);
+      }
+    });
 
   const handleSelectRow = (id) => {
     setSelectedRows(prevSelectedRows =>
@@ -102,6 +103,12 @@ function App() {
       String(val).toLowerCase().includes(searchTerm)
     )
   );
+
+  const handleQr = () => {
+    setUseQRCode(!useQRCode);
+    console.log(useQRCode);
+  }
+
 
   const selectedData = data.filter(item => selectedRows.includes(item.id));
 
@@ -143,7 +150,7 @@ function App() {
           </Row>
         </Col>
         <Col lg={3} className="d-flex justify-content-end align-items-end">
-          <ViewerLogo />
+          <img src={SinosteelLogo} className="img-fluid" />
         </Col>
       </Row>
       {alert.message && (
@@ -163,6 +170,16 @@ function App() {
             value={searchTerm}
             onChange={handleSearch}
           />
+        </Col>
+        <Col className="d-flex justify-content-end align-items-center">
+          <label>
+            <input
+              type="checkbox"
+              checked={useQRCode}
+              onChange={handleQr}
+            />
+            Mostrar QR-CODE
+          </label>
         </Col>
       </Row>
 
@@ -218,7 +235,7 @@ function App() {
       </Row>
       <Row>
         <Col>
-          <div style={{ height: '50vh', overflowY: 'auto' }}>
+          <div style={{ height: '40vh', overflowY: 'auto' }}>
             <table className="table table-striped">
               <thead>
                 <tr>
@@ -245,13 +262,13 @@ function App() {
         </Col>
       </Row>
       <div style={{ display: 'none' }}>
-        <PrintableTable ref={componentRef} data={replicatedData} />
+        <PrintableTable ref={componentRef} data={replicatedData} useQRCode={useQRCode} />
       </div>
     </div>
   );
 }
 
-const PrintableTable = React.forwardRef(({ data }, ref) => (
+const PrintableTable = React.forwardRef(({ data, useQRCode }, ref) => (
   <div ref={ref} className="container">
     <style>
       {`
@@ -270,37 +287,42 @@ const PrintableTable = React.forwardRef(({ data }, ref) => (
       `}
     </style>
     {data.map((item, index) => (
-      <>
-        <div className="row text-center h-30">
-          <h2>Sinosteel</h2>
-        </div>
-        <div className="row mb-5 pb-2" key={index} style={{ pageBreakInside: 'avoid' }}>
-          <div className="col-1">
+      console.log("useQrcode: ", useQRCode),
+      useQRCode == false ? (
+        <>
+          <div className="row text-center h-30">
+            <h2>Sinosteel</h2>
           </div>
-          <div className="col-10">
-            <p className="p-0 m-0">Fornecedor: {item.supplier}</p>
-            <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
-            <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
-            <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
-            <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
+          <div className="row mb-5 pb-2" key={index} style={{ pageBreakInside: 'avoid' }}>
+            <div className="col-1">
+            </div>
+            <div className="col-10">
+              <p className="p-0 m-0">Fornecedor: {item.supplier}</p>
+              <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
+              <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
+              <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
+              <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
+            </div>
+            <div className="col-1">
+            </div>
           </div>
-          <div className="col-1">
+        </>
+      ) : (
+        <>
+          <div className="row mb-3" key={index} style={{ pageBreakInside: 'avoid' }}>
+            <div className="col-8">
+              <h5>Fornecedor: {item.supplier}</h5>
+              <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
+              <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
+              <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
+              <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
+            </div>
+            <div className="col-4 text-center">
+              <img src={qrCode} className="img-fluid qr-code-img" alt="QR Code" />
+            </div>
           </div>
-        </div>
-      </>
-      /*
-  <div className="row mb-3" key={index} style={{ pageBreakInside: 'avoid' }}>
-    <div className="col-8">
-      <h5>Fornecedor: {item.supplier}</h5>
-      <p className="p-0 m-0"><strong>DESENHO:</strong> {item.draw}</p>
-      <p className="p-0 m-0"><strong>TAG:</strong> {item.equipament}</p>
-      <p className="p-0 m-0"><strong>SKU:</strong> {item.sku}</p>
-      <p className="p-0 m-0"><strong>DESCRIÇÃO:</strong> {item.description}</p>
-    </div>
-    <div className="col-4 text-center">
-      <img src={qrCode} className="img-fluid qr-code-img" alt="QR Code" />
-    </div>
-  </div>*/
+        </>
+      )
     ))}
   </div>
 ));
